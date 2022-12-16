@@ -2,10 +2,23 @@
 #include <ncurses.h>
 #include <array>
 #include <cmath>
+#include "printnc.h"
 int row, col;
 
 
+void whowins(bool player)
+{
+	if (player == false)
+	{
+		printnccenter("player one wins");
+	}
+	else
+	{
+		printnccenter("player two wins");
+	}
+	
 
+}
 
 class hands
 {
@@ -18,10 +31,22 @@ class hands
 		delwin(wleft);
 		delwin(wright);
 	}
-	bool top;
+	bool plr;
 
-	
-
+	void die()
+	{
+		for (int i = 0; i < 1; i++)
+		{
+			if (hitpoints[i] >5)
+			{
+				hitpoints[i]=0;
+			}
+		}
+		if (hitpoints[0]==0 && hitpoints[1]==0)
+		{
+			whowins(plr);
+		}
+	}
 	public:
 	std::array<int, 2> hitpoints = {1,1}; //0 for l, 1 for r
 
@@ -55,7 +80,7 @@ class hands
 		wrefresh(wleft);
 		wrefresh(wright);
 		wgetch(wleft);
-		top = true;
+		plr = true;
 	}
 	
 	void percall()
@@ -66,23 +91,7 @@ class hands
 	}
 };
 
-void whowins(bool won, bool player)
-{
-	if (won == false)
-	{
-		return	;
-	}
-	else if (player == false)
-	{
-		//player one wins
-	}
-	else
-	{
-		//player two wins
-	}
-	
 
-}
 void init()
 {
 	initscr();
