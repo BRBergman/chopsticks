@@ -1,3 +1,3 @@
-[submodule "include/BergmaNcurses"]
-	path = include/BergmaNcurses
+[submodule "BergmaNcurses"]
+	path = BergmaNcurses
 	url = https://github.com/BRBergman/BergmaNcurses
