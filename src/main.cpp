@@ -3,130 +3,137 @@
 #include <array>
 #include <cmath>
 #include "printnc.h"
-int row, col;
 
 
-void whowins(bool player)
+struct screensize
 {
-	if (player == false)
+	
+	private:
+	
+	public:
+		int row, col;
+
+	screensize()
 	{
-		printnccenter("player one wins");
-	}
-	else
-	{
-		printnccenter("player two wins");
+		initscr();
+		getmaxyx(stdscr,row,col);
 	}
 	
+};
 
-}
 
-class hands
+struct eachhand{
+
+	int hp = 1;
+	bool dead = false;
+	void takedamage(int damagepoints)
+	{
+		hp += damagepoints;
+		if (hp > 5)
+		{
+			hp = 0;
+			dead = true;
+		}
+		return;
+	}
+};
+
+class player
 {
-	private:
-	WINDOW *wleft;
-	WINDOW *wright;
 
+	private:
 	void delwins()
 	{
 		delwin(wleft);
 		delwin(wright);
 	}
-	bool plr;
 
-	void die()
-	{
-		for (int i = 0; i < 1; i++)
-		{
-			if (hitpoints[i] >5)
-			{
-				hitpoints[i]=0;
-			}
-		}
-		if (hitpoints[0]==0 && hitpoints[1]==0)
-		{
-			whowins(plr);
-		}
-	}
 	public:
-	std::array<int, 2> hitpoints = {1,1}; //0 for l, 1 for r
+	WINDOW *wleft;
+	WINDOW *wright;
+	eachhand hleft;
+	eachhand hright;
 
-	~hands()
+	~player()
 	{
 		delwins();
 	}
 
 	void transfer()	//equalize
 	{
-		float f = (float(hitpoints[0])+float(hitpoints[1]))/2;
+		float f = (float(hleft.hp)+float(hright.hp))/2;
 		mvprintw(1,1,"%f",f);
-		hitpoints[0]=int(floor(f));
-		hitpoints[1]=int(ceil(f));	
+		hleft.hp=int(floor(f));
+		hright.hp=int(ceil(f));	
 	}
-
-	hands(bool ontop)//constructor
+	
+	player(bool ontop, struct screensize scr)//constructor
 	{
 		if (ontop)
 		{
-			wleft = newwin(row/2,col/2,0,0);
-			wright = newwin(row/2,col/2,0,col/2);
+			wleft = newwin(scr.row/2,scr.col/2,0,0);
+			wright = newwin(scr.row/2,scr.col/2,0,scr.col/2);
 		}
 		else
 		{
-			wleft = newwin(row/2,col/2,row/2,0);
-			wright = newwin(row/2,col/2,row/2,col/2);
+			wleft = newwin(scr.row/2,scr.col/2,scr.row/2,0);
+			wright = newwin(scr.row/2,scr.col/2,scr.row/2,scr.col/2);
 		}
 		box(wleft,0,0);
 		box(wright,0,0);
 		wrefresh(wleft);
 		wrefresh(wright);
 		wgetch(wleft);
-		plr = true;
 	}
 	
-	void percall()
+	void perframe()
 	{
+	
 
-
-
+		
+		return; 
 	}
 };
 
 
-void init()
-{
-	initscr();
-	getmaxyx(stdscr,row,col);
-	return;
-}
+
+
 
 
 int main()
 {	
-	init();
+
+	screensize scr;
+
 	
-	hands bottom(false);
-	hands top(true);
-	
-	bottom.hitpoints[0]= 5;
-	bottom.hitpoints[1] = 0;
-	mvprintw(row/2-1,col/2,"%i|%i",bottom.hitpoints[0],bottom.hitpoints[1]);
-
-	bottom.transfer();
-	
-	mvprintw(row/2,col/2,"%i|%i",bottom.hitpoints[0],bottom.hitpoints[1]);
-
-
-
-
-
-
-
 
 
 	
 	
+	player plr1(false,scr); //bottom 
+	player plr2(true,scr);	//top
+	
+	bool anyonewon = false;
+	
+	/*
+	while (!anyonewon)
+	{
+		plr1.perframe();
+		plr2.perframe();
+		
+
+	}
+	
+	*/
+
+
+
+
+
 
 	
+	
+
 	getch();
 
 	

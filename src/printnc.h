@@ -3,7 +3,7 @@
 #include <ncurses.h>
 #include <iostream>
 #include <stdarg.h>
-extern int row, col;
+extern int prow, pcol;
 
 //print a message to the center of the screen, returns length 
 int printnccenter (const char *format, ...);
